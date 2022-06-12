@@ -5,6 +5,7 @@ import { GET_CLIENTS } from '../queries/ClientQueries';
 import Spinner from './Spinner';
 
 function Clients() {
+  // useQuery fetch data
   const { loading, error, data } = useQuery(GET_CLIENTS);
 
   if (loading) {

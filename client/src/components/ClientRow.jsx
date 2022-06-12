@@ -1,14 +1,34 @@
+import { useMutation } from '@apollo/client';
 import { FaTrash } from 'react-icons/fa';
+import { DELETE_CLIENTS } from '../mutations/ClientMutations';
+import { GET_CLIENTS } from '../queries/ClientQueries';
 
 
 export default function ClientRow({ client }) {
+  // Delete specific Client row - args & on delete refetch
+  const [deleteClient] = useMutation(DELETE_CLIENTS, {
+    variables: { id: client.id },
+
+    // If there are multiple requests that will occur updating the cache is the better approach
+    refetchQueries: [{ query: GET_CLIENTS }],
+    // update(cache, { data: { deleteClient } }) {
+    //   const { clients } = cache.readQuery({ query: GET_CLIENTS });
+    //   cache.writeQuery({
+    //     query: GET_CLIENTS,
+    //     data: {
+    //       clients: clients.filter((client) => client.id !== deleteClient.id),
+    //     },
+    //   });
+    // },
+  });
+
   return (
     <tr>
       <td>{client.name}</td>
       <td>{client.email}</td>
       <td>{client.phone}</td>
       <td>
-        <button className='btn btn-danger btn-sm'>
+        <button className='btn btn-danger btn-sm' onClick={deleteClient}>
           <FaTrash />
         </button>
       </td>
